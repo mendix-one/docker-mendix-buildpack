@@ -8,10 +8,10 @@ RUN apt-get update && \
     apt-get install -y wget curl unzip tar vim && \
     rm -rf /var/lib/apt/lists/*
 
-ARG JAVA_JDK_SOURCE_PATH=.
+ARG JAVA_JDK_SOURCE_PATH=base
 ARG JAVA_JDK_SOURCE_NAME=jdk-21_linux-x64_bin.deb
 ARG MXDOCKER_SOURCE_PATH=/home/ubuntu/docker-mendix-buildpack
-ARG MXBUILD_SOURCE_HOST=https://cdn.mendix.com/runtime
+ARG MXBUILD_SOURCE_HOST=.
 ARG MXBUILD_SOURCE_FILE=mxbuild-9.24.40.80973.tar.gz
 
 ARG MXBUILD_PATH=/opt/mxbuild
