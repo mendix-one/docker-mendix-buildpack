@@ -16,7 +16,7 @@ ARG MXBUILD_SOURCE_FILE=mxbuild-9.24.40.80973.tar.gz
 
 ARG MXBUILD_PATH=/opt/mxbuild
 ARG MXDOCKER_PATH=/opt/mxdocker
-ARG JAVA_HOME_PATH=/usr/lib/jvm/jdk-21.0.9-oracle-x64/
+ARG JAVA_HOME_PATH=/usr/lib/jvm/jdk-21.0.9-oracle-x64
 ARG PROJECT_PATH=/project
 ARG PROJECT_FILENAME=SampleApp.mpr
 ARG USER_UID=1001
@@ -54,9 +54,9 @@ WORKDIR ${MXDOCKER_PATH}
 COPY ${MXDOCKER_SOURCE_PATH}/ ./
 RUN ls -la
 
-RUN echo "${MXBUILD_PATH}/modeler/mxbuild --java-home=\"${JAVA_HOME_PATH}\" --java-exe-path=\"${JAVA_HOME_PATH}/bin/java\" ${PROJECT_PATH}/*.mpr && mkdir -p ${MXDOCKER_PATH}/build && copy -r ${PROJECT_PATH}/deployment/* ${MXDOCKER_PATH}/build/" > ${MXBUILD_PATH}/start
+RUN echo '${MXBUILD_PATH}/modeler/mxbuild --java-home="${JAVA_HOME_PATH}" --java-exe-path="${JAVA_HOME_PATH}/bin/java" ${PROJECT_PATH}/*.mpr && mkdir -p ${MXDOCKER_PATH}/build && copy -r ${PROJECT_PATH}/deployment/* ${MXDOCKER_PATH}/build/' > /build-start
 
-RUN chmod +x ${MXBUILD_PATH}/start
+RUN chmod +x build-start
 RUN chown -R ${USER_UID}:0 ${MXBUILD_PATH} && chmod -R g=u ${MXBUILD_PATH}
 RUN chown -R ${USER_UID}:0 ${MXDOCKER_PATH} && chmod -R g=u ${MXDOCKER_PATH}
 
@@ -64,9 +64,9 @@ RUN chown -R ${USER_UID}:0 ${MXDOCKER_PATH} && chmod -R g=u ${MXDOCKER_PATH}
 RUN mkdir -p ${PROJECT_PATH} && chown -R ${USER_UID}:0 ${PROJECT_PATH} && chmod -R g=u ${PROJECT_PATH}
 WORKDIR ${MXDOCKER_PATH}
 
-USER ${USER_UID}
+# USER ${USER_UID}
 
 VOLUME ${PROJECT_PATH}
 ENV PROJECT_NAME="${PROJECT_FILENAME}"
 
-ENTRYPOINT ["bash"]
+ENTRYPOINT ["/build-start", "bash"]
