@@ -54,6 +54,9 @@ WORKDIR ${MXDOCKER_PATH}
 COPY ${MXDOCKER_SOURCE_PATH} ./
 RUN ls -la
 
+RUN echo "${MXBUILD_PATH}/modeler/mxbuild --java-home=\"${JAVA_HOME_PATH}\" --java-exe-path=\"${JAVA_HOME_PATH}/bin/java\" ${PROJECT_PATH}/${PROJECT_NAME} && mkdir -p ${MXDOCKER_PATH}/build && copy -r ${PROJECT_PATH}/deployment/* ${MXDOCKER_PATH}/build/" > ${MXBUILD_PATH}/start
+
+RUN chmod +x ${MXBUILD_PATH}/start
 RUN chown -R ${USER_UID}:0 ${MXBUILD_PATH} && chmod -R g=u ${MXBUILD_PATH}
 RUN chown -R ${USER_UID}:0 ${MXDOCKER_PATH} && chmod -R g=u ${MXDOCKER_PATH}
 
@@ -66,7 +69,4 @@ USER ${USER_UID}
 VOLUME ${PROJECT_PATH}
 ENV PROJECT_NAME="${PROJECT_FILENAME}"
 
-ENTRYPOINT [
-"mxbuild --java-home=\"${JAVA_HOME_PATH}\" --java-exe-path=\"${JAVA_HOME_PATH}/bin/java\" ${PROJECT_PATH}/${PROJECT_NAME}",
-"mkdir -p ${MXDOCKER_PATH}/build && copy -r ${PROJECT_PATH}/deployment/* ${MXDOCKER_PATH}/build/"
-]
+ENTRYPOINT ["${MXBUILD_PATH}/start"]
