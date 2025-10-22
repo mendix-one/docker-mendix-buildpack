@@ -8,13 +8,15 @@ RUN apt-get update && \
     apt-get install -y wget curl unzip tar vim && \
     rm -rf /var/lib/apt/lists/*
 
-ARG SOURCE_PATH=./
 ARG MXBUILD_URL=https://cdn.mendix.com/runtime/mxbuild-9.24.40.80973.tar.gz
 ARG MXBUILD_PATH=/opt/mxbuild
+ARG MXDOCKER_SOURCE_PATH=/home/ubuntu/docker-mendix-buildpack
+ARG MXDOCKER_PATH=/opt/mxdocker
 ARG JAVA_JDK_PATH=.
 ARG JAVA_JDK_BIN_DEB=jdk-21_linux-x64_bin.deb
 ARG JAVA_HOME_PATH=/usr/lib/jvm/jdk-21.0.9-oracle-x64/
 ARG USER_UID=1001
+ARG SOURCE_PATH=/opt/source
 
 # Check variable
 RUN echo "PACKAGE_BASE_IMAGE: ${PACKAGE_BASE_IMAGE}" && \
@@ -31,18 +33,19 @@ WORKDIR /tmp
 COPY ${JAVA_JDK_PATH}/${JAVA_JDK_BIN_DEB} ./
 RUN dpkg -i ./${JAVA_JDK_BIN_DEB}
 RUN ${JAVA_HOME_PATH}/bin/java --version
+RUN rm -rf ./${JAVA_JDK_BIN_DEB}
 
 # Download mxbuild kit
-RUN mkdir -p /opt/mxbuild && \
-    cd /opt/mxbuild && \
+RUN mkdir -p ${MXBUILD_PATH} && \
+    cd ${MXBUILD_PATH} && \
     curl -LJO ${MXBUILD_URL} && \
-    tar -zxvf mxbuild-9.24.40.80973.tar.gz
+    tar -zxvf mxbuild-9.24.40.80973.tar.gz &&\
+    rm -rf mxbuild-9.24.40.80973.tar.gz
 
-
-# Build source
-RUN mkdir -p /opt/source && chown -R ${USER_UID}:0 /opt/source && chmod -R g=u /opt/source
-WORKDIR /opt/source
-COPY ${SOURCE_PATH} ./
+# Make MX Docker Patch
+RUN mkdir -p ${MXDOCKER_PATH}
+WORKDIR ${MXDOCKER_PATH}
+COPY ${MXDOCKER_SOURCE_PATH} ./
 RUN ls -la
 
 ENTRYPOINT ["bash"]
