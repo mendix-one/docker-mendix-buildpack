@@ -19,7 +19,7 @@ ARG MXDOCKER_PATH=/opt/mxdocker
 ARG JAVA_HOME_PATH=/usr/lib/jvm/jdk-21.0.9-oracle-x64
 ARG PROJECT_PATH=/project
 ARG PROJECT_FILENAME=SampleApp.mpr
-ARG USER_UID=1001
+#ARG USER_UID=1001
 
 # Check variable
 RUN echo "PACKAGE_BASE_IMAGE: ${PACKAGE_BASE_IMAGE}" && \
@@ -57,8 +57,8 @@ RUN ls -la
 RUN echo '${MXBUILD_PATH}/modeler/mxbuild --java-home="${JAVA_HOME_PATH}" --java-exe-path="${JAVA_HOME_PATH}/bin/java" ${PROJECT_PATH}/*.mpr && mkdir -p ${MXDOCKER_PATH}/build && copy -r ${PROJECT_PATH}/deployment/* ${MXDOCKER_PATH}/build/' > /build-start
 
 RUN chmod +x build-start
-RUN chown -R ${USER_UID}:0 ${MXBUILD_PATH} && chmod -R g=u ${MXBUILD_PATH}
-RUN chown -R ${USER_UID}:0 ${MXDOCKER_PATH} && chmod -R g=u ${MXDOCKER_PATH}
+#RUN chown -R ${USER_UID}:0 ${MXBUILD_PATH} && chmod -R g=u ${MXBUILD_PATH}
+#RUN chown -R ${USER_UID}:0 ${MXDOCKER_PATH} && chmod -R g=u ${MXDOCKER_PATH}
 
 # Dockerfile
 RUN mkdir -p ${PROJECT_PATH} && chown -R ${USER_UID}:0 ${PROJECT_PATH} && chmod -R g=u ${PROJECT_PATH}
