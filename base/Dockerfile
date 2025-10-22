@@ -62,6 +62,7 @@ RUN chmod +x /build-start
 
 # Dockerfile
 RUN mkdir -p ${PROJECT_PATH} && chown -R ${USER_UID}:0 ${PROJECT_PATH} && chmod -R g=u ${PROJECT_PATH}
+RUN mkdir -p /root/.local/share/Mendix
 WORKDIR ${MXDOCKER_PATH}
 
 # USER ${USER_UID}
