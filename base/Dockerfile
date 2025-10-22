@@ -17,8 +17,8 @@ ARG MXBUILD_SOURCE_FILE=mxbuild-9.24.40.80973.tar.gz
 ARG MXBUILD_PATH=/opt/mxbuild
 ARG MXDOCKER_PATH=/opt/mxdocker
 ARG JAVA_HOME_PATH=/usr/lib/jvm/jdk-21.0.9-oracle-x64/
-ARG PROJECT_PATH=/opt/source
-ARG PROJECT_NAME=SampleApp.mpr
+ARG PROJECT_PATH=/project
+ARG PROJECT_FILENAME=SampleApp.mpr
 ARG USER_UID=1001
 
 # Check variable
@@ -54,4 +54,19 @@ WORKDIR ${MXDOCKER_PATH}
 COPY ${MXDOCKER_SOURCE_PATH} ./
 RUN ls -la
 
-ENTRYPOINT ["bash"]
+RUN chown -R ${USER_UID}:0 ${MXBUILD_PATH} && chmod -R g=u ${MXBUILD_PATH}
+RUN chown -R ${USER_UID}:0 ${MXDOCKER_PATH} && chmod -R g=u ${MXDOCKER_PATH}
+
+# Dockerfile
+RUN mkdir -p ${PROJECT_PATH} && chown -R ${USER_UID}:0 ${PROJECT_PATH} && chmod -R g=u ${PROJECT_PATH}
+WORKDIR ${MXDOCKER_PATH}
+
+USER ${USER_UID}
+
+VOLUME ${PROJECT_PATH}
+ENV PROJECT_NAME="${PROJECT_FILENAME}"
+
+ENTRYPOINT [
+"mxbuild --java-home=\"${JAVA_HOME_PATH}\" --java-exe-path=\"${JAVA_HOME_PATH}/bin/java\" ${PROJECT_PATH}/${PROJECT_NAME}",
+"mkdir -p ${MXDOCKER_PATH}/build && copy -r ${PROJECT_PATH}/deployment/* ${MXDOCKER_PATH}/build/"
+]
