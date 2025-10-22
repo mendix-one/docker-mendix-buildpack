@@ -10,7 +10,7 @@ RUN apt-get update && \
 
 ARG JAVA_JDK_SOURCE_PATH=.
 ARG JAVA_JDK_SOURCE_NAME=jdk-21_linux-x64_bin.deb
-ARG MXDOCKER_SOURCE_PATH=../../
+ARG MXDOCKER_SOURCE_PATH=..
 ARG MXBUILD_SOURCE_HOST=https://cdn.mendix.com/runtime
 ARG MXBUILD_SOURCE_FILE=mxbuild-9.24.40.80973.tar.gz
 
@@ -51,7 +51,7 @@ RUN mkdir -p ${MXBUILD_PATH} && \
 # Make MX Docker Patch
 RUN mkdir -p ${MXDOCKER_PATH}
 WORKDIR ${MXDOCKER_PATH}
-COPY ${MXDOCKER_SOURCE_PATH} ./
+COPY ${MXDOCKER_SOURCE_PATH}/* ./
 RUN ls -la
 
 RUN echo "${MXBUILD_PATH}/modeler/mxbuild --java-home=\"${JAVA_HOME_PATH}\" --java-exe-path=\"${JAVA_HOME_PATH}/bin/java\" ${PROJECT_PATH}/${PROJECT_NAME} && mkdir -p ${MXDOCKER_PATH}/build && copy -r ${PROJECT_PATH}/deployment/* ${MXDOCKER_PATH}/build/" > ${MXBUILD_PATH}/start
