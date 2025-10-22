@@ -10,7 +10,7 @@ RUN apt-get update && \
 
 ARG MXBUILD_URL=https://cdn.mendix.com/runtime/mxbuild-9.24.40.80973.tar.gz
 ARG MXBUILD_PATH=/opt/mxbuild
-ARG MXDOCKER_SOURCE_PATH=/home/ubuntu/docker-mendix-buildpack
+ARG MXDOCKER_SOURCE_PATH=../
 ARG MXDOCKER_PATH=/opt/mxdocker
 ARG JAVA_JDK_PATH=.
 ARG JAVA_JDK_BIN_DEB=jdk-21_linux-x64_bin.deb
