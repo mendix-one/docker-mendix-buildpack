@@ -2,8 +2,8 @@
 # Mendix Deployment Archive (aka mda file)
 FROM ubuntu:noble
 #This version does a full build originating from the Ubuntu Docker images
-LABEL Author="Mendix Digital Ecosystems"
-LABEL maintainer="digitalecosystems@mendix.com"
+LABEL Author="Mendix One Team"
+LABEL maintainer="contact@mendix.one"
 
 # When doing a full build: install dependencies & remove package lists
 RUN apt-get -q -y update && \
